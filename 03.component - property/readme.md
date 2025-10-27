@@ -13,9 +13,9 @@
 
 #### Examples
 1. 함수 컴포넌트의 property - (예제: ex01)
-2. Data Flow - (예제: ex02)
-3. 클래스 컴포넌트의 property - (예제: ex03)
-4. Property Validation - (예제: ex04)
+2. Data Flow - (예제: ex02, ex03)
+3. 클래스 컴포넌트의 property - (예제: ex04)
+4. Property Validation - (예제: ex05)
    
 
 #### 실습

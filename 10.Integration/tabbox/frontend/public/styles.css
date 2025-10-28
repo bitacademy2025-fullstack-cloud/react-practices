@@ -1,0 +1,35 @@
+@charset "utf-8";
+* {
+    margin: 0;
+    padding: 0;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizelegibility;
+    letter-spacing: -0.25px;
+}
+
+ul, ol, dl {
+    list-style-type: none;
+}
+
+body {
+    font-family: 'Space Mono', monospace;
+    display: flex;
+    flex-direction: column;
+    padding: 32px;
+    margin: 60px auto;
+}
+
+#root, #App {
+    width: 100%
+}
+
+
+/* --- */
+
+.Tab_Box		                    { width: fit-content; margin: 100px auto }
+.Tab_Box ul		                    { height:24px }
+.Tab_Box ul .Tab_Item	            { float: right; width: 100px; border:1px solid #999; border-radius: 10px 10px 0 0; margin-right:2px; text-align:center; background-color: #ccc; height:22px; line-height:22px; cursor: pointer }	
+.Tab_Box ul .Tab_Item:nth-child(1)	{ margin-right: 0 }
+.Tab_Box ul .Tab_Item.active        { background-color: #fc6 }
+.Tab_Box .Tab_View                  { width: calc(100% - 2px); height: 200px; margin-top: -1px; line-height: 200px; text-align: center; border:1px solid #999;}

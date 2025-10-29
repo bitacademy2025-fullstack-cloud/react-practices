@@ -17,8 +17,8 @@
 2. Function Handler - (예제: ex02)
 3. Synthetic Event - (예제: ex03)
 4. Event Handler Examples - (예제: ex04)
-5. Using ref: Function 컴포넌트 - (예제: ex05)
-6. Using ref: Class 컴포넌트 - (예제: ex06)
+5. Using ref: Class 컴포넌트 - (예제: ex05)
+6. Using ref: Function 컴포넌트 - (예제: ex06)
 
 
 #### 실습

@@ -11,7 +11,7 @@ const StyledDiv = styled.div`
 
 const KanbanBoard = () => {
     return (
-            <StyledDiv className={'KanbanBoard'}>
+            <StyledDiv className={'Kanban_Board'}>
                 <CardList 
                     key={'To Do'}
                     title={'To Do'}

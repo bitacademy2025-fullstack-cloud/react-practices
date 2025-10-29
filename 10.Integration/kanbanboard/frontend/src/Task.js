@@ -6,7 +6,7 @@ const Task = ({no, name, done}) => {
         <li className={_Task}>
             <input
                 type='checkbox'
-                checked={done === 'Y'} />
+                checked={done} />
             {' '}    
             {name}     
             {' '}    

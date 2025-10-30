@@ -14,12 +14,12 @@ export default function Form() {
             action="/do/not/post"
             onSubmit = {(e) => {
                 e.preventDefault();
-
+                
                 console.log({
                     name: name,
                     email: email,
                     birthYear: e.target.birthYear.value 
-                })
+                });
             }}>
             <label htmlFor="name">이름</label>
             <input

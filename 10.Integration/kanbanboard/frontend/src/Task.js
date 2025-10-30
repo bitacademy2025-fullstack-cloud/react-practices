@@ -8,7 +8,10 @@ const Task = ({no, name, done}) => {
         <li className={_Task}>
             <input
                 type='checkbox'
-                checked={doneChecked} />
+                checked={doneChecked} 
+                onChange={() => {
+                    setDoneChecked(!doneChecked);
+                }}/>
             {' '}    
             {name}     
             {' '}    

@@ -1,8 +1,18 @@
-import React from 'react';
+import React, { useEffect }  from 'react';
 import './assets/scss/Clock.scss';
 
 export default function Clock({title, hours, minutes, seconds}) {
-    
+        useEffect(() => {
+
+           console.log('clock: after mount')     
+
+            return () => {
+               
+                console.log('clock: before unmount');                
+
+            };
+        }, []);
+
         return (
             <div className={'clock-display'}>
                 <h2>{title}</h2>

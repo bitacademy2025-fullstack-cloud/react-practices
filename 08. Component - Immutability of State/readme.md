@@ -42,7 +42,9 @@
    ```javascript
    import update from 'react-addons-update';
    
-   const newObject = update(objectInState, { [WHERE] : { [WHAT]: updateValue } });
+   const newObject = update(objectInState, { 
+      [WHERE] : { [WHAT]: updateValue }
+   });
    ```
 
 4. WHERE

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import Modal from "react-modal";
 import ReactModal from "react-modal";
 import styled from 'styled-components';
@@ -15,30 +15,48 @@ ReactModal.setAppElement('body');
 
 export default function App() {
     const [items, setItems] = useState(null);
+    
+    const fetchItems = async () => {
+        try {
+            const response = await fetch('/item', {
+                method: 'get',
+                header: {
+                    'Accept': 'application/json'
+                },
+                body: null
+            });
+
+            if(!response.ok) {
+                throw new Error(response.status);
+            }
+
+            const jsonResult = await response.json();
+
+            if(jsonResult.result === 'fail') {
+                throw new Error(jsonResult.message);
+            }
+
+            setItems(jsonResult.data);
+
+        } catch(err) {
+            console.error(err);
+        }
+    };
+
+
+    useEffect(() => {
+        fetchItems();
+    }, []);
+
 
     return (
         <div id={'App'}>
             <h1>AJAX: Restful API</h1>
             
+
             
-            <h2 onClick={async () => {
-                try {
-                    const response = await fetch('/item', {
-                        method: 'get',
-                        header: {
-                            'Accpet': 'application/json'
-                        },
-                        body: null
-                    });
-
-                    console.log(response);
-
-                    
-                } catch(err) {
-                    console.error(err);
-                }
-            }}>Items</h2>
-
+            
+            <h2 onClick={() => fetchItems()}>Items</h2>
             <ItemList>
                 {
                     items?.map((item, index) => <Item key={item.id}>

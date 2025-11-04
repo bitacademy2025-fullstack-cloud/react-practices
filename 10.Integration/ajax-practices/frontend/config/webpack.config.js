@@ -42,7 +42,7 @@ module.exports = {
         historyApiFallback: true,
         proxy:[{
             context: ['/item'],
-            taget: 'http://localhost:8080'
+            target: 'http://localhost:8080'
         }]
     }        
 }

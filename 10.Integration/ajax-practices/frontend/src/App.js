@@ -21,10 +21,24 @@ export default function App() {
             <h1>AJAX: Restful API</h1>
             
             
-            <h2 onClick={() => {
-                console.log('click');
+            <h2 onClick={async () => {
+                try {
+                    const response = await fetch('/item', {
+                        method: 'get',
+                        header: {
+                            'Accpet': 'application/json'
+                        },
+                        body: null
+                    });
+
+                    console.log(response);
+
+                    
+                } catch(err) {
+                    console.error(err);
+                }
             }}>Items</h2>
-            
+
             <ItemList>
                 {
                     items?.map((item, index) => <Item key={item.id}>

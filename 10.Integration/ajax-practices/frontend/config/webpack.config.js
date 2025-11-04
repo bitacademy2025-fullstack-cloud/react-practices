@@ -38,6 +38,11 @@ module.exports = {
             watch: false
         },
         compress: true,
-        hot: false
+        hot: false,
+        historyApiFallback: true,
+        proxy:[{
+            context: ['/item'],
+            taget: 'http://localhost:8080'
+        }]
     }        
 }

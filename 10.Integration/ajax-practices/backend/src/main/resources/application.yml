@@ -9,8 +9,15 @@ spring:
       livereload:
          enabled: true
 
+   mvc:
+      static-path-pattern: /assets/**
+
 # server configuration
 server:
    port: 8080
    servlet:
       context-path: /
+   error:
+      whitelabel:
+         enabled: false
+      path: /error			

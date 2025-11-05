@@ -36,14 +36,12 @@ public class ItemController {
 	}
 	
 	@DeleteMapping("/{id}")
-	public ResponseEntity<JsonResult<Long>> delete(@PathVariable Long id) {
+	public ResponseEntity<JsonResult<Boolean>> delete(@PathVariable Long id) {
 		log.info("Request[DELETE /item/{}]", id);
 		
-		Boolean result = items.removeIf((item) -> {
-			return item.getId() == id;
-		});
-		
-		return null;
+		return ResponseEntity
+				.status(HttpStatus.OK)
+				.body(JsonResult.success(items.removeIf(item -> item.getId() == id)));
 	}
 	
 }

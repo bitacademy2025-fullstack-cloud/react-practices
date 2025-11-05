@@ -5,6 +5,7 @@ import ReactModal from "react-modal";
 import styled from 'styled-components';
 
 import axios from 'axios';
+import serialize from 'form-serialize';
 
 import noImage from './assets/images/no-image.png';
 import './assets/scss/App.scss';
@@ -45,6 +46,34 @@ export default function App() {
         }
     };
 
+    const addItem = async (item) => {
+       try {
+            const response = await fetch('/item', {
+                method: 'post',
+                header: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(item)
+            });
+
+            if(!response.ok) {
+                throw new Error(response.status);
+            }
+
+            const jsonResult = await response.json();
+
+            if(jsonResult.result === 'fail') {
+                throw new Error(jsonResult.message);
+            }
+
+            console.log(jsonResult.data);
+
+        } catch(err) {
+            console.error(err);
+        }        
+    }
+
     const deleteItem = async (id) => {
         try {
             const response = await axios.delete(`/item/${id}`);
@@ -68,7 +97,41 @@ export default function App() {
         <div id={'App'}>
             <h1>AJAX: Restful API</h1>
             <div>
-                <form>
+                <form onSubmit={(event) => {
+                    event.preventDefault();
+                    
+                    try {
+                        /*
+                        const item = Array.from(event.target, (el) => {
+                            if(el.name !== '' && el.value === '') {
+                                throw new Error(`validation ${el.name} is empty`);
+                            }
+
+                            return {name: el.name, value: el.value};
+                        })
+                        .filter((e) => e.name !== '')
+                        .reduce((res, e) => { 
+                            res[e.name] = e.value;
+                            return res;
+                        }, {});
+                        */
+
+                        Array.from(event.target, (el) => {
+                            if(el.name !== '' && el.value === '') {
+                                throw new Error(`validation ${el.name} is empty`);
+                            }
+                            return null;
+                        })
+
+                        // const item = serialize(event.target);
+
+                        const item = serialize(event.target, {hash: true});                        
+                        addItem(item);
+                    } catch(err) {
+                        alert(err);
+                    }
+
+                }}>
                     <select name={'type'}>
                         <option>CLOTHE</option>
                         <option>MUSIC</option>

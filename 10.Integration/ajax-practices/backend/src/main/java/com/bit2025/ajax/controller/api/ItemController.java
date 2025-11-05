@@ -1,6 +1,10 @@
 package com.bit2025.ajax.controller.api;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -13,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.bit2025.ajax.domain.Item;
 import com.bit2025.ajax.dto.JsonResult;
@@ -44,8 +49,32 @@ public class ItemController {
 	}
 
 	@PostMapping(consumes={MediaType.MULTIPART_FORM_DATA_VALUE})
-	public ResponseEntity<JsonResult<Item>> create() {
-		return null;
+	public ResponseEntity<JsonResult<Item>> create(Item item, MultipartFile file) {
+		log.info("Request[POST /item, Content-Type: multipart/form-data][{}, {}]", item, file.getOriginalFilename());
+		
+		try {
+			final String filename = UUID
+					.randomUUID()
+					.toString()
+					.concat(file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".")));
+					
+			Files.write(Files
+					.createDirectories(Paths.get("/ajax-practices/uploads/images"))
+					.resolve(filename), file.getBytes());
+			
+			Long maxId = items.isEmpty() ? 0L : items.getFirst().getId();
+			item.setId(maxId + 1);
+			item.setImage("/assets/images/" + filename);
+
+			items.addFirst(item);
+			
+			return ResponseEntity
+					.status(HttpStatus.OK)
+					.body(JsonResult.success(item));
+
+		} catch(IOException ex) {
+			throw new RuntimeException(ex);
+		}
 	}
 
 	@GetMapping

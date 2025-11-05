@@ -6,6 +6,7 @@ import styled from 'styled-components';
 
 import axios from 'axios';
 import serialize from 'form-serialize';
+import update from 'react-addons-update';
 
 import noImage from './assets/images/no-image.png';
 import './assets/scss/App.scss';
@@ -18,7 +19,13 @@ ReactModal.setAppElement('body');
 
 export default function App() {
     const [items, setItems] = useState(null);
-    
+    const [modalData, setModalData] = useState({
+        itemType: '',
+        itemName: '',
+        open: false
+    })
+
+
     const fetchItems = async () => {
         try {
             const response = await fetch('/item', {
@@ -45,6 +52,29 @@ export default function App() {
             console.error(err);
         }
     };
+
+    const addItemWithImage = async(item) => {
+        try {
+            const formData = new FormData();
+            formData.append("name", item.name);
+            formData.append("type", item.type);
+            formData.append("file", item.file);
+
+            const response = await axios.post('/item', formData, {
+                'Accept': 'application/json',
+                'Content-Type': 'multipart/form-data'
+            });
+            const jsonResult = response.data;
+
+            if(jsonResult.result === 'fail') {
+                throw new Error(jsonResult.message);
+            }
+
+            setItems([jsonResult.data, ...items]);
+        } catch(err) {
+            console.error(err);
+        }
+    }
 
     const addItem = async (item) => {
        try {
@@ -138,6 +168,7 @@ export default function App() {
                         <option>CAR</option>
                         <option>BEAUTY</option>
                         <option>MOVIE</option>
+                        <option>BOOK</option>
                         <option>FOOD</option>
                     </select>
                     {' '}
@@ -145,13 +176,33 @@ export default function App() {
                     <input type={'submit'} value={'[Create] (post)'} />
                 </form>
 
-                <form>
+                <form onSubmit={(event) => {
+                    event.preventDefault();
+                    
+                    try {
+                        Array.from(event.target, (el) => {
+                            if(el.name !== '' && el.value === '') {
+                                throw new Error(`validation ${el.name} is empty`);
+                            }
+                            return null;
+                        })
+
+                        const item = serialize(event.target, {hash: true});                        
+                        item.file = event.target.file.files[0];
+
+                        addItemWithImage(item);
+                    } catch(err) {
+                        alert(err);
+                    }
+
+                }}>
                     <select name={'type'}>
                         <option>CLOTHE</option>
                         <option>MUSIC</option>
                         <option>CAR</option>
                         <option>BEAUTY</option>
                         <option>MOVIE</option>
+                        <option>BOOK</option>
                         <option>FOOD</option>
                     </select>
                     {' '}
@@ -167,7 +218,16 @@ export default function App() {
                     {
                         items?.map((item, index) => <Item key={item.id}>
                             <h4>
-                                <b>{item.name}</b>
+                                <b onClick={async () => {
+                                    const response = await axios.get(`/item/${item.id}`);
+                                    const jsonResult = response.data;
+
+                                    setModalData(update(modalData, {
+                                        open: {$set: true},
+                                        itemType: {$set: jsonResult.data.type},
+                                        itemName: {$set: jsonResult.data.name}
+                                    }));
+                                }}>{item.name}</b>
                                 <button onClick={() => deleteItem(item.id)}>[Delete] (delete)</button>
                             </h4>
                             <div>
@@ -178,6 +238,59 @@ export default function App() {
                         </Item>)
                     }
             </ItemList>
+
+            <Modal
+                isOpen={modalData.open}
+                onRequestClose={ () => setModalData(update(modalData, {
+                    open: {
+                        $set: false
+                    }
+                })) }
+                className={ styles.Modal }
+                overlayClassName={ styles.Overlay }
+                style={ {content: {width: 350}} }>
+                
+                <h3>Update Item</h3>
+                <form>
+                    <label>Type</label>
+                    {' '}
+                    <select
+                        name={'type'}
+                        value={modalData.itemType}
+                        onChange={(event) => {
+                             setModalData(update(modalData, {
+                                itemType: {
+                                    $set: event.target.value
+                                } 
+                            }))                           
+                        }}>
+                        <option>CLOTHE</option>
+                        <option>MUSIC</option>
+                        <option>CAR</option>
+                        <option>BEAUTY</option>
+                        <option>MOVIE</option>
+                        <option>BOOK</option>
+                        <option>FOOD</option>
+                    </select>
+                    <br/><br/>
+                    <label>Name</label>
+                    {' '}
+                    <input
+                        type={'text'}
+                        name={'name'}
+                        placeholder={'name'}
+                        value={modalData.itemName}
+                        onChange={(event) => {
+                            setModalData(update(modalData, {
+                                itemName: {
+                                    $set: event.target.value
+                                } 
+                            }))
+                        }}/>
+                    <hr/>
+                    <input type={'submit'} value={'[Update] (put)'} />
+                </form>
+            </Modal>            
  
         </div>
     );

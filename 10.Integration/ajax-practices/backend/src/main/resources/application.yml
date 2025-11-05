@@ -14,7 +14,7 @@ spring:
 
    web:
       resources:
-         static-locations: [classpath:assets/, file:/ajax-practices/uploads/]
+         static-locations: [classpath:assets/, file:/ajax-practices-uploads/]
 
    servlet:
       multipart:

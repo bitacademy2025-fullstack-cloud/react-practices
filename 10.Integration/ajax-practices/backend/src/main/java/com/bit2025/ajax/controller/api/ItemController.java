@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -59,7 +60,7 @@ public class ItemController {
 					.concat(file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".")));
 					
 			Files.write(Files
-					.createDirectories(Paths.get("/ajax-practices/uploads/images"))
+					.createDirectories(Paths.get("/ajax-practices-uploads/images"))
 					.resolve(filename), file.getBytes());
 			
 			Long maxId = items.isEmpty() ? 0L : items.getFirst().getId();
@@ -105,6 +106,22 @@ public class ItemController {
 						.filter(item -> item.getId() == id)
 						.findAny()
 						.orElse(null)));
+	}
+	
+	@PutMapping("/{id}")
+	public ResponseEntity<JsonResult<Item>> update(@PathVariable Long id, Item item) {
+		log.info("Request[put /item/{}][{}]", id, item);
+		
+		int index = items.indexOf(new Item(id));
+		Item updateItem = index == -1 ? null : items.get(index);
+		if(updateItem != null) {
+			updateItem.setType(item.getType());
+			updateItem.setName(item.getName());
+		}
+		
+		return ResponseEntity
+				.status(HttpStatus.OK)
+				.body(JsonResult.success(updateItem));
 	}
 	
 	@DeleteMapping("/{id}")

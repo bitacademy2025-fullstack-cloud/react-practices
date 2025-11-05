@@ -41,7 +41,7 @@ module.exports = {
         hot: false,
         historyApiFallback: true,
         proxy:[{
-            context: ['/item'],
+            context: ['/item', '/assets'],
             target: 'http://localhost:8080'
         }]
     }        

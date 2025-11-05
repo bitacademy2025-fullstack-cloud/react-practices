@@ -23,7 +23,7 @@ export default function App() {
         try {
             const response = await fetch('/item', {
                 method: 'get',
-                header: {
+                headers: {
                     'Accept': 'application/json'
                 },
                 body: null
@@ -50,7 +50,7 @@ export default function App() {
        try {
             const response = await fetch('/item', {
                 method: 'post',
-                header: {
+                headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
                 },
@@ -67,7 +67,7 @@ export default function App() {
                 throw new Error(jsonResult.message);
             }
 
-            console.log(jsonResult.data);
+            setItems([jsonResult.data, ...items]);
 
         } catch(err) {
             console.error(err);

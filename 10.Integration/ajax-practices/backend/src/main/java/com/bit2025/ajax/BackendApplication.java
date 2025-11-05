@@ -16,9 +16,9 @@ public class BackendApplication {
 	List<Item> itemList() {
 		return new LinkedList<>(List.of(
 			new Item(10L, "BOOK", "history of western civilization"),
-			new Item(21L, "FOOD", "apple pie"),
-			new Item(13L, "CLOTHE", "hood shirt"),
-			new Item(5L, "BOOK", "spring in action")
+			new Item(8L, "FOOD", "apple pie"),
+			new Item(6L, "CLOTHE", "hood shirt"),
+			new Item(1L, "BOOK", "spring in action")
 		));		
 	}
 

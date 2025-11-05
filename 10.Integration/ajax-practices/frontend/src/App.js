@@ -43,6 +43,9 @@ export default function App() {
         }
     };
 
+    useEffect(() => {
+        console.log(items);
+    }, [items]);
 
     useEffect(() => {
         fetchItems();
@@ -54,7 +57,7 @@ export default function App() {
             <h1>AJAX: Restful API</h1>
             
 
-            
+
             
             <h2 onClick={() => fetchItems()}>Items</h2>
             <ItemList>
@@ -62,7 +65,13 @@ export default function App() {
                     items?.map((item, index) => <Item key={item.id}>
                         <h4>
                             <b>{item.name}</b>
-                            <button>[Delete] (delete)</button>
+                            <button onClick={() => {
+                                
+                                console.log(item.id + "will be deleted....");
+
+                                
+
+                            }}>[Delete] (delete)</button>
                         </h4>
                         <div>
                             <span>{index + 1}</span>

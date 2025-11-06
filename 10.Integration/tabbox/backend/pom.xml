@@ -58,6 +58,8 @@
 	</dependencies>
 
 	<build>
+		<finalName>tabbox</finalName>
+		
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

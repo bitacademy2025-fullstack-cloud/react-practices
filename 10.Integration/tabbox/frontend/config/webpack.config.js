@@ -1,4 +1,5 @@
 const path = require('path');
+const webpack = require('webpack');
 
 module.exports = {
     mode: "development",
@@ -28,7 +29,12 @@ module.exports = {
             test: /\.(png|gif|jp?eg|svg|ico|tif?f|bmp)/i,
             type: 'asset/resource'            
         }],
-    },     
+    },
+    plugins: [
+        new webpack.DefinePlugin({
+            'API_HOST': JSON.stringify(process.env.NODE_ENV === 'development' ? '' : 'http://192.168.0.177:8080')
+        })
+    ],     
     devServer: {
         host: '0.0.0.0',
         port: 9090,

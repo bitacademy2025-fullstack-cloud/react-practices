@@ -16,6 +16,6 @@ public class TabBoxController {
 	public ResponseEntity<JsonResult<String>> hello() {
 		return ResponseEntity
 				.status(HttpStatus.OK)
-				.body(JsonResult.success("OK"));
+				.body(JsonResult.success("Hello, TabBox"));
 	}
 }

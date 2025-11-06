@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -118,6 +119,13 @@ public class ItemController {
 			updateItem.setType(item.getType());
 			updateItem.setName(item.getName());
 		}
+		
+//		Optional
+//			.ofNullable(items.indexOf(new Item(id)) == -1 ? null : items.get(index))
+//			.ifPresent(t -> {
+//				t.setType(item.getType());
+//				t.setName(item.getName());
+//			});
 		
 		return ResponseEntity
 				.status(HttpStatus.OK)

@@ -20,11 +20,11 @@ ReactModal.setAppElement('body');
 export default function App() {
     const [items, setItems] = useState(null);
     const [modalData, setModalData] = useState({
+        itemId: 0,
         itemType: '',
         itemName: '',
         open: false
     })
-
 
     const fetchItems = async () => {
         try {
@@ -75,7 +75,7 @@ export default function App() {
             console.error(err);
         }
     }
-
+    
     const addItem = async (item) => {
        try {
             const response = await fetch('/item', {
@@ -99,6 +99,33 @@ export default function App() {
 
             setItems([jsonResult.data, ...items]);
 
+        } catch(err) {
+            console.error(err);
+        }        
+    }
+
+    const updateItem = async (id, item) => {
+        try {
+            const response = await axios.put(`/item/${id}`, new URLSearchParams(item), {
+                'Accept': 'application/json',
+                'Content-Type': 'application/x-www-form-urlencoded'
+            });
+            const jsonResult = response.data;
+
+            if(jsonResult.result === 'fail') {
+                throw new Error(jsonResult.message);
+            }
+
+            const updateItem = jsonResult.data;
+            const index = items.findIndex((e) => e.id === updateItem.id);
+
+            setItems([...items.slice(0, index), updateItem, ...items.slice(index + 1)]);
+            setModalData(update(modalData, {
+                open: {$set: false},
+                itemId: {$set: 0},
+                itemType: {$set: ''},
+                itemName: {$set: ''}
+            }));
         } catch(err) {
             console.error(err);
         }        
@@ -224,6 +251,7 @@ export default function App() {
 
                                     setModalData(update(modalData, {
                                         open: {$set: true},
+                                        itemId: {$set: jsonResult.data.id},
                                         itemType: {$set: jsonResult.data.type},
                                         itemName: {$set: jsonResult.data.name}
                                     }));
@@ -251,7 +279,12 @@ export default function App() {
                 style={ {content: {width: 350}} }>
                 
                 <h3>Update Item</h3>
-                <form>
+                <form onSubmit={(event) => {
+                    event.preventDefault();
+
+                    const item = serialize(event.target, {hash: true});
+                    updateItem(modalData.itemId, item);
+                }}>
                     <label>Type</label>
                     {' '}
                     <select

@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 
 import Modal from "react-modal";
 import ReactModal from "react-modal";
@@ -18,6 +18,8 @@ const Item = styled.li``;
 ReactModal.setAppElement('body');
 
 export default function App() {
+    const refCreateForm1 = useRef(null);
+    const refCreateForm2 = useRef(null);
     const [items, setItems] = useState(null);
     const [modalData, setModalData] = useState({
         itemId: 0,
@@ -71,6 +73,7 @@ export default function App() {
             }
 
             setItems([jsonResult.data, ...items]);
+            refCreateForm2.current.reset();
         } catch(err) {
             console.error(err);
         }
@@ -98,7 +101,7 @@ export default function App() {
             }
 
             setItems([jsonResult.data, ...items]);
-
+            refCreateForm1.current.reset();
         } catch(err) {
             console.error(err);
         }        
@@ -154,7 +157,9 @@ export default function App() {
         <div id={'App'}>
             <h1>AJAX: Restful API</h1>
             <div>
-                <form onSubmit={(event) => {
+                <form
+                    ref={refCreateForm1}
+                    onSubmit={(event) => {
                     event.preventDefault();
                     
                     try {
@@ -180,8 +185,6 @@ export default function App() {
                             return null;
                         })
 
-                        // const item = serialize(event.target);
-
                         const item = serialize(event.target, {hash: true});                        
                         addItem(item);
                     } catch(err) {
@@ -203,7 +206,9 @@ export default function App() {
                     <input type={'submit'} value={'[Create] (post)'} />
                 </form>
 
-                <form onSubmit={(event) => {
+                <form
+                    ref={refCreateForm2}
+                    onSubmit={(event) => {
                     event.preventDefault();
                     
                     try {

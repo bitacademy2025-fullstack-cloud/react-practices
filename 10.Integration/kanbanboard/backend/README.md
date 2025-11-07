@@ -118,10 +118,7 @@ example value
 {
   "result": "success",
   "message": null,
-  "data": {
-    "no": 10,
-    "done": "Y"
-  }
+  "data": true | false
 }
 ```
 ---
@@ -143,6 +140,6 @@ example value
 {
   "result": "success",
   "message": null,
-  "data": 10
+  "data": true | false
 }
 ```

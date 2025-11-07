@@ -11,7 +11,7 @@
 	</parent>
 
 	<groupId>com.bit2025</groupId>
-	<artifactId>kanbanboard</artifactId>
+	<artifactId>kanbanboard-backend</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>kanbanboard</name>
 
@@ -68,7 +68,7 @@
 	</dependencies>
 
 	<build>
-		<finalName>kanbanboard</finalName>
+		<finalName>kanbanboard-backend</finalName>
 
 		<plugins>
 			<plugin>

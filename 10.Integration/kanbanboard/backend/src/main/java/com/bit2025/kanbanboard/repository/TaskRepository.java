@@ -1,4 +1,4 @@
-package com.example.demo.repository;
+package com.bit2025.kanbanboard.repository;
 
 import java.util.HashMap;
 import java.util.List;
@@ -7,7 +7,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.example.demo.vo.TaskVo;
+import com.bit2025.kanbanboard.vo.TaskVo;
 
 @Repository
 public class TaskRepository {
@@ -23,8 +23,6 @@ public class TaskRepository {
 		return sqlSession.insert("task.insert", taskVo) == 1;
 	}
 	
-
-
 	public Boolean updateDone(Long no, String done) {
 		return sqlSession.update("task.updateDone", new HashMap<String, Object>() {{
 		    put("no", no);

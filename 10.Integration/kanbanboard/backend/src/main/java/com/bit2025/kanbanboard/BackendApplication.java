@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.bit2025.kanbanboard;
 
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.jdbc.ScriptRunner;
@@ -11,14 +11,14 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
-public class Kanbanboard07Application {
+public class BackendApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(Kanbanboard07Application.class, args);
+		SpringApplication.run(BackendApplication.class, args);
 	}
 	
 	@Bean
-	public ApplicationRunner scriptRunner() {
+	ApplicationRunner scriptRunner() {
 		return new ApplicationRunner() {
 			@Autowired
 			private SqlSessionFactory sqlSessionFactory;

@@ -4,7 +4,7 @@ import {_Card, Card_Title, Card_Title_Open}from './assets/scss/Card.scss';
 
 const Card = ({title, description, tasks}) => {
     const [showDetails, setShowDetails] = useState(false);
-    
+
     return (
         <div className={_Card}>
             <div

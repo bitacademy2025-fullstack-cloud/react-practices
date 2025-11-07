@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
+import axios from 'axios';
 import styled from 'styled-components';
 import CardList from './CardList.js';
-import data from './assets/json/data.js';
 
 const StyledDiv = styled.div`
     white-space: nowrap;
@@ -11,25 +11,16 @@ const StyledDiv = styled.div`
 
 const KanbanBoard = () => {
     const [cards, setCards] = useState([]);
+
     const fetchCrads = async () => {
         try {
-            const response = await fetch('/api/card', {
-                method: 'get',
-                headers: {
-                    'Accept': 'application/json'
-                }
-            });
-
-            if (!response.ok) {
-                throw new Error(`${response.status} ${response.statusText}`);
+            const response = await axios.get('/api/card');
+            const jsonResult = response.data
+            if (jsonResult.result !== 'success') {
+                throw new Error(`${jsonResult.result} ${jsonResult.message}`);
             }
 
-            const json = await response.json();
-            if (json.result !== 'success') {
-                throw new Error(`${json.result} ${json.message}`);
-            }
-
-            setCards(json.data);
+            setCards(jsonResult.data);
         } catch (err) {
             console.log(err.message);
         }

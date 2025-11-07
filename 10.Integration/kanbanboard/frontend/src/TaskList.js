@@ -2,7 +2,7 @@ import React from 'react';
 import Task from './Task';
 import {Task_List, Input_Add_Task} from './assets/scss/TaskList.scss';
 
-const TaskList = ({cardNo, tasks, callbackAddTask, callbackChangeTaskDone}) => {
+const TaskList = ({tasks, addTask, deleteTask, changeTaskDone}) => {
     return (
         <div className={Task_List}>
             <ul>
@@ -12,7 +12,8 @@ const TaskList = ({cardNo, tasks, callbackAddTask, callbackChangeTaskDone}) => {
                                         no={task.no}                                        
                                         name={task.name}
                                         done={task.done}
-                                        callback={callbackChangeTaskDone} />)
+                                        deleteTask={deleteTask}
+                                        changeTaskDone={changeTaskDone} />)
                 }
             </ul>
             <input
@@ -21,7 +22,7 @@ const TaskList = ({cardNo, tasks, callbackAddTask, callbackChangeTaskDone}) => {
                 className={Input_Add_Task}
                 onKeyDown={(e) => {
                     if (e.key === 'Enter') {
-                        callbackAddTask(e.target.value);
+                        addTask(e.target.value);
                         e.target.value = '';
                     }
                 }} />

@@ -30,5 +30,13 @@
 			 where no=#{no}	
 	  	]]>	
 	</update>	
+
+	<update id="dateleByNo" parameterType="long">
+		<![CDATA[
+			delete
+			  from task 
+			 where no=#{no}	
+	  	]]>	
+	</update>	
 		
 </mapper>

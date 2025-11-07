@@ -1,40 +1,28 @@
 import React, {useState} from 'react';
+import update from 'react-addons-update';
+import axios from 'axios';
 import TaskList from './TaskList';
 import {_Card, Card_Title, Card_Title_Open}from './assets/scss/Card.scss';
 
-const Card = ({no, title, description, status}) => {
+const Card = ({no, title, description}) => {
     const [showDetails, setShowDetails] = useState(false);
     const [tasks, setTasks] = useState([]);
 
     const changeTaskDone = async (no, done) => {
         try {
-            const response = await fetch(`/api/task/${no}`, {
-                method: 'put',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                    'Accept': 'application/json'
-                },
-                body: `done=${done}`
+            const response = await axios.put(`/api/task/${no}`, new URLSearchParams({done: done}), {
+                'Accept': 'application/json',
+                'Content-Type': 'application/x-www-form-urlencoded'
             });
+            const jsonResult = response.data;
 
-            if (!response.ok) {
-                throw new Error(`${response.status} ${response.statusText}`);
-            }
-
-            const json = await response.json();
-            if (json.result !== 'success') {
-                throw new Error(`${json.result} ${json.message}`);
-            }
-            
-            const newTasks = update(tasks, {
-                [tasks.findIndex(task => task.no === json.data.no)]: {
+            jsonResult.data && setTasks(update(tasks, {
+                [tasks.findIndex(task => task.no === no)]: {
                     done: {
-                        $set: json.data.done
+                        $set: done
                     }
                 }
-            });
-
-            setTasks(newTasks);
+            }));
 
         } catch (err) {
             console.error(err);
@@ -43,38 +31,41 @@ const Card = ({no, title, description, status}) => {
 
     const addTask = async (taskName) => {
         try {
-            const newTask = {
+            const response = await axios.post('/api/task', {
                 no: null,
                 name: taskName,
                 done: 'N',
                 cardNo: no
-            };
-
-            const response = await fetch(`/api/task`, {
-                method: 'post',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                },
-                body: JSON.stringify(newTask)
             });
 
-            if (!response.ok) {
-                throw new Error(`${response.status} ${response.statusText}`);
-            }
+            const jsonResult = response.data;
 
-            const json = await response.json();
-            if (json.result !== 'success') {
+            if (jsonResult.result !== 'success') {
                 throw new Error(`${json.result} ${json.message}`);
             }
 
-            setTasks([json.data, ...tasks]);
+            setTasks([jsonResult.data, ...tasks]);
 
         } catch (err) {
             console.error(err);
         }
     }
     
+   const deleteTask = async (no) => {
+    try {
+            const response = await axios.delete(`/api/task/${no}`);
+            const jsonResult = response.data;
+
+            if (jsonResult.result !== 'success') {
+                throw new Error(`${json.result} ${json.message}`);
+            }
+
+            jsonResult.data && setTasks(tasks.filter(t => t === no));
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
     return (
         <div className={_Card}>
             <div
@@ -82,23 +73,14 @@ const Card = ({no, title, description, status}) => {
                 onClick={async () => {
                     if(!showDetails) {
                         try {
-                            const response = await fetch(`/api/task?cardNo=${no}`, {
-                                method: 'get',
-                                headers: {
-                                    'Accept': 'application/json'
-                                }
-                            });
-                
-                            if (!response.ok) {
-                                throw new Error(`${response.status} ${response.statusText}`);
+                            const response = await axios.get(`/api/task?cardNo=${no}`);                
+                            const jsonResult = response.data;
+                            
+                            if (jsonResult.result !== 'success') {
+                                throw new Error(`${jsonResult.result} ${jsonResult.message}`);
                             }
                 
-                            const json = await response.json();
-                            if (json.result !== 'success') {
-                                throw new Error(`${json.result} ${json.message}`);
-                            }
-                
-                            setTasks(json.data);
+                            setTasks(jsonResult.data);
 
                         } catch (err) {
                             console.log(err.message);
@@ -114,10 +96,10 @@ const Card = ({no, title, description, status}) => {
                     <div>
                         {description}
                         <TaskList
-                            cardNo={no}
                             tasks={tasks}
-                            callbackAddTask={addTask}
-                            callbackChangeTaskDone={changeTaskDone} />
+                            addTask={addTask}
+                            deleteTask={deleteTask}
+                            changeTaskDone={changeTaskDone} />
                     </div> :
                     null
             }

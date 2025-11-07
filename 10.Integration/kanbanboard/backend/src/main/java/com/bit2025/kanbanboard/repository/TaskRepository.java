@@ -30,4 +30,8 @@ public class TaskRepository {
 		}}) == 1;
 
 	}
+
+	public Boolean dateleByNo(Long no) {
+		return sqlSession.delete("task.dateleByNo", no) == 1;
+	}
 }

@@ -56,7 +56,7 @@ example value
     },
     {
       "no": 2,
-      "title": "...",
+      "name": "...",
       "done": "N",
       "cardNo": "10"
     }    
@@ -77,7 +77,7 @@ example value
 ```json
 {
   "no": null,
-  "title": "...",
+  "name": "...",
   "done": "N",
   "cardNo": "10"
 } 
@@ -93,7 +93,7 @@ example value
 ```json
 {
   "no": 5,
-  "title": "...",
+  "name": "...",
   "done": "N",
   "cardNo": "10"
 } 

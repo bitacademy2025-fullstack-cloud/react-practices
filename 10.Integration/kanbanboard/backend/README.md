@@ -66,7 +66,7 @@ example value
 ---
 
 
-### POST /kanbaboard/task
+### POST /api/task
 #### Parameters
 none
 
@@ -101,7 +101,7 @@ example value
 ---
 
 
-### PUT /kanbaboard/task/{no}
+### PUT /api/task/{no}
 #### Parameters
 no : Long(PATH)
 
@@ -128,7 +128,7 @@ example value
 
 
 
-### DELETE /kanbaboard/task/{no}
+### DELETE /api/task/{no}
 #### Parameters
 no : Long(PATH)
 

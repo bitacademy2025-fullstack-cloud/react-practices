@@ -1,6 +1,7 @@
 package com.bit2025.kanbanboard.controller.api;
 
-import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.bit2025.kanbanboard.dto.JsonResult;
 import com.bit2025.kanbanboard.repository.CardRepository;
 import com.bit2025.kanbanboard.repository.TaskRepository;
+import com.bit2025.kanbanboard.vo.CardVo;
 import com.bit2025.kanbanboard.vo.TaskVo;
 
 @RestController
@@ -29,21 +31,21 @@ public class ApiController {
 	private TaskRepository taskRepository;
 
 	@GetMapping("/card")
-	public ResponseEntity<JsonResult> readCard() {
+	public ResponseEntity<JsonResult<List<CardVo>>> readCard() {
 		return ResponseEntity
 				.status(HttpStatus.OK)
 				.body(JsonResult.success(cardRepository.findAll()));
 	}
 	
 	@GetMapping("/task")
-	public ResponseEntity<JsonResult> readTask(Long cardNo) {
+	public ResponseEntity<JsonResult<List<TaskVo>>> readTask(Long cardNo) {
 		return ResponseEntity
 				.status(HttpStatus.OK)
 				.body(JsonResult.success(taskRepository.findAllByCardNo(cardNo)));
 	}
 
 	@PostMapping("/task")
-	public ResponseEntity<JsonResult> createTask(@RequestBody TaskVo taskVo) {
+	public ResponseEntity<JsonResult<TaskVo>> createTask(@RequestBody TaskVo taskVo) {
 		taskRepository.insert(taskVo);
 		
 		return ResponseEntity
@@ -51,17 +53,13 @@ public class ApiController {
 				.body(JsonResult.success(taskVo));
 	}
 
-	@SuppressWarnings("serial")
 	@PutMapping("/task/{no}")
-	public ResponseEntity<JsonResult> updateTask(@PathVariable("no") Long no, String done) {
+	public ResponseEntity<JsonResult<Map<?, ?>>> updateTask(@PathVariable Long no, String done) {
 		taskRepository.updateDone(no, done);
 		
 		return ResponseEntity
 				.status(HttpStatus.OK)
-				.body(JsonResult.success(new HashMap<String, Object>() {{
-				    put("no", no);
-				    put("done", done);
-				}}));
+				.body(JsonResult.success(Map.of("no", no, "done", done)));		
 	}
 
 }
